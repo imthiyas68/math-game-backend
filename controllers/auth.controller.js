@@ -11,7 +11,7 @@ exports.signup = (req, res) => {
         school: req.body.school,
         email: req.body.email,
         country: req.body.country,
-        class: req.body.classN.toString(),
+        class: req.body?.classN?.toString(),
         userName: req.body.username,
         scores: req.body.scores,
         role: req.body.role ? req.body.role : 'normal',
