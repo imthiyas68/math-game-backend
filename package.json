@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "db": "start mongod --dbpath ./db",
+    "start": "node app.js",
     "server": "nodemon app.js",
-    "dev":" concurrently \"npm run db\" \"npm run server\""
+    "dev": " concurrently \"npm run db\" \"npm run server\""
   },
   "keywords": [],
   "author": "",
