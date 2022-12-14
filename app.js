@@ -69,13 +69,14 @@ let clients = [[], [], [], [], [], []];
 const maxProblems = 100;
 // console.log(clients)
 const makeProblems = level => {
+    console.log(level, 72);
     const template = [
         {},
-        { leftmin: 1, leftmax: 10, rightmin: 1, rightmax: 10 },
-        { leftmin: 1, leftmax: 10, rightmin: 10, rightmax: 20 },
-        { leftmin: 10, leftmax: 20, rightmin: 10, rightmax: 20 },
+        { leftmin: 0, leftmax: 100, rightmin: 0, rightmax: 20 },
+        { leftmin: 1, leftmax: 20, rightmin: 1, rightmax: 20 },
+        { leftmin: 1, leftmax: 12, rightmin: 1, rightmax: 12 },
         { leftmin: 10, leftmax: 20, rightmin: 20, rightmax: 30 },
-        { leftmin: 20, leftmax: 40, rightmin: 20, rightmax: 40 }
+        { leftmin: 1, leftmax: 20, rightmin: 2, rightmax: 3 }
     ]
     const problems = [];
     for (let i = 0; i < maxProblems; i++) {
@@ -132,13 +133,12 @@ io.on('connection', socket => {
 
     /* Start Game Room*/
 
-    socket.on('getGameInfo', data => {
-        console.log(data, clients);
-        if (data.problem == true)
-            socket.emit('getGameInfo', { clients: clients[data.level], problems: makeProblems(data.level), type: data.type });
+    socket.on('getGameInfo', ({ email, level, problem, type }) => {
+        console.log(email, level, clients);
+        if (problem == true)
+            socket.emit('getGameInfo', { clients: clients[level], problems: makeProblems(level), type: type });
         else {
-            // console.log(clients)
-            socket.emit('getGameInfo', { myInfo: clients[data.level].filter(item => item.email == data.email)[0], type: data.type });
+            socket.emit('getGameInfo', { myInfo: clients[level].filter(item => item.email == email)[0], type: type });
         }
     });
 
@@ -156,7 +156,7 @@ io.on('connection', socket => {
 
 
     socket.on('leaveRoom', data => {
-        console.log('This is leave Room----->', data, clients);
+        // console.log('This is leave Room----->', data, clients);
         clients[data.level] = clients[data.level].filter(item => item.email != data.email);
         socket.leave(gameRoom + data.level);
         // io.to(gameRoom+data.level).emit('leaveRoom' );
