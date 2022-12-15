@@ -66,21 +66,28 @@ const io = new Server(server, {
 
 const gameRoom = 'gameRoom';
 let clients = [[], [], [], [], [], []];
-const maxProblems = 100;
+const maxProblems = 120;
 // console.log(clients)
 const makeProblems = level => {
-    console.log(level, 72);
+    console.log(typeof level, 72);
     const template = [
         {},
         { leftmin: 0, leftmax: 100, rightmin: 0, rightmax: 20 },
         { leftmin: 1, leftmax: 20, rightmin: 1, rightmax: 20 },
         { leftmin: 1, leftmax: 12, rightmin: 1, rightmax: 12 },
-        { leftmin: 10, leftmax: 20, rightmin: 20, rightmax: 30 },
+        { leftmin: 2, leftmax: 12, rightmin: 1, rightmax: 12 },
         { leftmin: 1, leftmax: 20, rightmin: 2, rightmax: 3 }
     ]
     const problems = [];
-    for (let i = 0; i < maxProblems; i++) {
-        problems.push([Math.round(Math.random() * (template[level].leftmax - template[level].leftmin) + template[level].leftmin), Math.round(Math.random() * (template[level].rightmax - template[level].rightmin) + template[level].rightmin)]);
+    if (level === 4) {
+        for (let i = 0; i < maxProblems; i++) {
+            const divisor = Math.round(Math.random() * (template[level].leftmax - template[level].leftmin) + template[level].leftmin)
+            problems.push([Math.round(Math.random() * (template[level].leftmax - template[level].leftmin) + template[level].leftmin) * divisor, divisor]);
+        }
+    } else {
+        for (let i = 0; i < maxProblems; i++) {
+            problems.push([Math.round(Math.random() * (template[level].leftmax - template[level].leftmin) + template[level].leftmin), Math.round(Math.random() * (template[level].rightmax - template[level].rightmin) + template[level].rightmin)]);
+        }
     }
     return problems;
 }
