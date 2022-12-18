@@ -4,7 +4,13 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
     fullName: {
         type: String,
-        required: [true, "fullname not provided"]
+        required: [true, "fullname not provided"],
+        validate: {
+            validator: function (v) {
+                return /^([a-zA-Z]{2,}\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)/.test(v);
+            },
+            message: '{VALUE} is not a valid name'
+        }
     },
     school: {
         type: String,
@@ -46,13 +52,86 @@ const UserSchema = new Schema({
         required: true
     },
     scores: {
-        type: [],
-        items: {
-            type: Number
+        lev1: {
+            value: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+            accuracy: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
         },
-        maxItems: 5,
-        minItems: 5,
-        default: [0, 0, 0, 0, 0, 0]
+        lev2: {
+            value: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+            accuracy: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+        },
+        lev3: {
+            value: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+            accuracy: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+        },
+        lev4: {
+            value: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+            accuracy: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+        },
+        lev5: {
+            value: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+            accuracy: {
+                type: [],
+                items: {
+                    type: Number
+                },
+                default: []
+            },
+        },
     },
     created: {
         type: Date,

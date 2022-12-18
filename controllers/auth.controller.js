@@ -4,7 +4,7 @@ const User = require('../models/User');
 
 
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
     console.log('singup')
     const user = new User({
         fullName: req.body.fullname,
@@ -18,7 +18,7 @@ exports.signup = (req, res) => {
         password: bcrypt.hashSync(req.body.password, 8)
     });
 
-    user.save((err, user) => {
+    await user.save((err, user) => {
         console.log(err);
         if (err) {
             return res.status(500).send({ message: err });
@@ -35,46 +35,43 @@ exports.signup = (req, res) => {
 exports.signin = async (req, res) => {
     console.log('signin')
     console.log(req.body);
-    await User.findOne({ userName: req.body.username })
-        .exec((err, user) => {
-            console.log(err);
-            if (err) {
-                return res.status(500).send({ message: err });
-            }
-            if (!user) {
-                return res.status(404).send({ message: "User not found" });
-            }
+    try {
+        const user = await User.findOne({ userName: req.body.username })
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
-            const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+        if (!passwordIsValid) {
+            return res.status(400).send({ accessToken: null, message: "Invalid Password!" });
+        }
 
-            if (!passwordIsValid) {
-                return res.status(400).send({ accessToken: null, message: "Invalid Password!" });
-            }
+        const token = jwt.sign({
+            id: user._id,
+            email: user.email,
+            fullName: user.fullName,
+            school: user.school,
+            country: user.country,
+            class: user.class,
+            userName: user.userName,
+            role: user.role
+        }, process.env.API_SECRET, { expiresIn: 86400 });
 
-            const token = jwt.sign({
-                id: user.id,
+        res.status(200).send({
+            user: {
+                id: user._id,
                 email: user.email,
                 fullName: user.fullName,
                 school: user.school,
                 country: user.country,
                 class: user.class,
                 userName: user.userName,
-                role: user.role
-            }, process.env.API_SECRET, { expiresIn: 86400 });
-
-            res.status(200).send({
-                user: {
-                    id: user._id,
-                    email: user.email,
-                    fullName: user.fullName,
-                    school: user.school,
-                    country: user.country,
-                    class: user.class,
-                    userName: user.userName,
-                },
-                message: "Login successfull",
-                accessToken: token
-            });
-
+                scores: user.scores
+            },
+            message: "Login successfull",
+            accessToken: token
         });
+    } catch (err) {
+        res.status(500).send({ message: err });
+    }
 }

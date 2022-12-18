@@ -2,20 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const { signin, signup } = require('../controllers/auth.controller');
-const { setResult } = require('../controllers/game.controller');
+const { setResult, result } = require('../controllers/game.controller');
 const verifyToken = require('../middlewares/authJWT');
 
 
-router.post("/register", signup, (req, res) => {
-
-});
-
-router.post("/login", signin, (req, res) => {
-
-});
-router.post('/setResult', setResult, (req, res) => {
-
-});
+router.post("/register", signup);
+router.post("/login", signin);
+router.post('/setResult', setResult);
+router.get('/result/:id', result)
 
 router.get('/hiddencontent', verifyToken, (req, res) => {
     if (!req.user) {
@@ -29,7 +23,7 @@ router.get('/hiddencontent', verifyToken, (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.send({ message: 'api update time 1048p14/12' })
+    res.send({ message: 'api update time 0831a18/12' })
 })
 
 

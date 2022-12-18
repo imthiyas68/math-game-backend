@@ -25,7 +25,7 @@ try {
         console.log("MongoDB connected");
     });
 } catch (err) {
-    handleError(err);
+    console.log(err);
 }
 
 
@@ -95,7 +95,7 @@ const makeProblems = level => {
 
 
 io.on('connection', socket => {
-    console.log(`connection established via id:${socket.id}`);
+    // console.log(`connection established via id:${socket.id}`);
 
 
     /* Enter Game Room */
@@ -103,8 +103,8 @@ io.on('connection', socket => {
     socket.on('enteredReadyRoom', data => {
 
 
-        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!enteredReadyRoom');
-        console.log(data, clients);
+        // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!enteredReadyRoom');
+        // console.log(data, clients);
         const temp = clients[data.level].filter(item => item.email == data.email);
         if (temp.length > 0) {
             socket.emit('enteredReadyRoom', { clients: clients[data.level], entered: true });
@@ -114,7 +114,7 @@ io.on('connection', socket => {
                 if (temp.length == 0) {
                     socket.join(gameRoom + data.level);
                     clients[data.level].push({ ...data, wrong: 0, right: 0 });
-                    console.log(clients, '----->joined');
+                    // console.log(clients, '----->joined');
                 }
                 io.to(gameRoom + data.level).emit('enteredReadyRoom', { clients: clients[data.level], entered: true });
             }
@@ -132,7 +132,7 @@ io.on('connection', socket => {
     socket.on('readyToStart', data => {
 
         console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!readyToStart');
-        console.log(data, clients);
+        // console.log(data, clients);
         clients[data.level] = clients[data.level].map(item => item.email == data.email ? { ...item, ready: true } : item);
         io.to(gameRoom + data.level).emit('readyToStart', { clients: clients[data.level] });
     });
@@ -141,7 +141,7 @@ io.on('connection', socket => {
     /* Start Game Room*/
 
     socket.on('getGameInfo', ({ email, level, problem, type }) => {
-        console.log(email, level, clients);
+        // console.log(email, level, clients);
         if (problem == true)
             socket.emit('getGameInfo', { clients: clients[level], problems: makeProblems(level), type: type });
         else {
@@ -150,13 +150,13 @@ io.on('connection', socket => {
     });
 
     socket.on('wrong', data => {
-        console.log('Wrong socket api is called ---->', data, clients);
+        // console.log('Wrong socket api is called ---->', data, clients);
         clients[data.level] = clients[data.level].map(item => item.email == data.email ? { ...item, wrong: item.wrong + 1 } : item);
         io.to(gameRoom + data.level).emit('wrong', { clients: clients[data.level] });
     });
 
     socket.on('right', data => {
-        console.log('Right socket api is called ---->', data, clients);
+        // console.log('Right socket api is called ---->', data, clients);
         clients[data.level] = clients[data.level].map(item => item.email == data.email ? { ...item, right: item.right + 1 } : item);
         io.to(gameRoom + data.level).emit('right', { clients: clients[data.level] });
     });
