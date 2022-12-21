@@ -11,7 +11,7 @@ exports.setResult = async (req, res) => {
         // console.log(user.scores);
         try {
             await user.save()
-            res.send('success')
+            res.send(user)
         } catch (err) {
             res.status(500).send({ message: err })
         }
@@ -23,9 +23,10 @@ exports.setResult = async (req, res) => {
 
 exports.result = async (req, res) => {
     const { id } = req.params;
+    console.log(id, 'game controller');
     try {
         const user = await User.findOne({ _id: mongoose.Types.ObjectId(id) })
-        // console.log(user);
+        console.log(user.fullName, 'game con 2');
         if (!user) {
             res.status(500).send({ message: 'no user found' })
         } else {
@@ -33,6 +34,19 @@ exports.result = async (req, res) => {
         }
     } catch (err) {
         // console.log(err);
+        res.status(500).send({ message: err })
+    }
+}
+
+exports.allUsers = async (req, res) => {
+    try {
+        const user = await User.find({})
+        if (!user) {
+            res.status(500).send({ message: 'no user found' })
+        } else {
+            res.send(user)
+        }
+    } catch (err) {
         res.status(500).send({ message: err })
     }
 }
