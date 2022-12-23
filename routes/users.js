@@ -24,7 +24,7 @@ router.get('/hiddencontent', verifyToken, (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.send({ message: 'api update time 0831a18/12' })
+    res.send({ message: 'api update time 1157a23/12' })
 })
 
 
