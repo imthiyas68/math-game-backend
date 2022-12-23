@@ -60,7 +60,7 @@ const UserSchema = new Schema({
                 },
                 default: []
             },
-            accuracy: {
+            question: {
                 type: [],
                 items: {
                     type: Number
@@ -76,7 +76,7 @@ const UserSchema = new Schema({
                 },
                 default: []
             },
-            accuracy: {
+            question: {
                 type: [],
                 items: {
                     type: Number
@@ -92,7 +92,7 @@ const UserSchema = new Schema({
                 },
                 default: []
             },
-            accuracy: {
+            question: {
                 type: [],
                 items: {
                     type: Number
@@ -108,7 +108,7 @@ const UserSchema = new Schema({
                 },
                 default: []
             },
-            accuracy: {
+            question: {
                 type: [],
                 items: {
                     type: Number
@@ -124,7 +124,7 @@ const UserSchema = new Schema({
                 },
                 default: []
             },
-            accuracy: {
+            question: {
                 type: [],
                 items: {
                     type: Number

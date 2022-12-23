@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 exports.setResult = async (req, res) => {
-    const { id, level, right, accuracy } = req.body;
+    const { id, level, right, question } = req.body;
     // console.log(req.body);
     try {
         const user = await User.findOne({ _id: mongoose.Types.ObjectId(id) })
         user.scores['lev' + level].value.push(right)
-        user.scores['lev' + level].accuracy.push(accuracy)
+        user.scores['lev' + level].question.push(question)
         // console.log(user.scores);
         try {
             await user.save()
