@@ -50,3 +50,20 @@ exports.allUsers = async (req, res) => {
         res.status(500).send({ message: err })
     }
 }
+
+
+exports.deleteUser = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    try {
+        const user = await User.deleteOne({ _id: mongoose.Types.ObjectId(id) })
+        console.log(user);
+        if (!user.acknowledged) {
+            res.status(500).send({ message: 'no user found' })
+        } else {
+            res.send(user)
+        }
+    } catch (err) {
+        res.status(500).send({ message: err })
+    }
+}
