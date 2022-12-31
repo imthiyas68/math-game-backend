@@ -1,23 +1,34 @@
 const mongoose = require('mongoose');
+const Game = require('../models/Game');
 const User = mongoose.model('User');
 
 exports.setResult = async (req, res) => {
-    const { id, level, right, question } = req.body;
-    // console.log(req.body);
+    const { id, level, right, question, gameId, fullName, email, country } = req.body;
+    const newGame = new Game({
+        gameId, fullName, email, country, right, question, level
+    })
+
     try {
-        const user = await User.findOne({ _id: mongoose.Types.ObjectId(id) })
-        user.scores['lev' + level].value.push(right)
-        user.scores['lev' + level].question.push(question)
-        // console.log(user.scores);
+        await newGame.save();
+        // console.log(req.body);
         try {
-            await user.save()
-            res.send(user)
+            const user = await User.findOne({ _id: mongoose.Types.ObjectId(id) })
+            user.scores['lev' + level].value.push(right)
+            user.scores['lev' + level].question.push(question)
+            // console.log(user.scores);
+            try {
+                await user.save()
+                res.send(user)
+            } catch (err) {
+                res.status(500).send({ message: err })
+            }
         } catch (err) {
             res.status(500).send({ message: err })
         }
     } catch (err) {
         res.status(500).send({ message: err })
     }
+
 
 }
 
