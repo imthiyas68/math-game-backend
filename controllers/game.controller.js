@@ -78,3 +78,14 @@ exports.deleteUser = async (req, res) => {
         res.status(500).send({ message: err })
     }
 }
+
+exports.gameScore = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    try {
+        const games = await Game.find({ gameId: id })
+        res.send(games)
+    } catch (err) {
+        res.status(500).send({ message: err })
+    }
+}

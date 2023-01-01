@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { signin, signup } = require('../controllers/auth.controller');
-const { setResult, result, allUsers, deleteUser } = require('../controllers/game.controller');
+const { setResult, result, allUsers, deleteUser, gameScore } = require('../controllers/game.controller');
 const verifyToken = require('../middlewares/authJWT');
 
 
@@ -12,6 +12,7 @@ router.post('/setResult', setResult);
 router.get('/result/:id', result)
 router.get('/users', allUsers)
 router.delete('/user/:id', deleteUser)
+router.get('/game/:id', gameScore)
 
 router.get('/hiddencontent', verifyToken, (req, res) => {
     if (!req.user) {
