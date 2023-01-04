@@ -66,7 +66,8 @@ exports.signin = async (req, res) => {
                 country: user.country,
                 class: user.class,
                 userName: user.userName,
-                scores: user.scores
+                scores: user.scores,
+                role: user.role
             },
             message: "Login successfull",
             accessToken: token
