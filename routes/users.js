@@ -10,7 +10,7 @@ router.post("/register", signup);
 router.post("/login", signin);
 router.post('/setResult', setResult);
 router.get('/result/:id', result)
-router.get('/users', allUsers)
+router.post('/users/pagination', allUsers)
 router.delete('/user/:id', deleteUser)
 router.get('/game/:id', gameScore)
 router.delete('/scores', resetResult)

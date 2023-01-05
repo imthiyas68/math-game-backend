@@ -30,6 +30,8 @@ exports.setResult = async (req, res) => {
     }
 }
 
+
+
 exports.result = async (req, res) => {
     const { id } = req.params;
     console.log(id, 'game controller');
@@ -47,14 +49,44 @@ exports.result = async (req, res) => {
     }
 }
 
+const usePages = {
+    pages: 1,
+    setPages: function (data) { this.pages = data },
+    filter: {},
+    setFilter: function (data) { this.filter = data }
+}
+
 exports.allUsers = async (req, res) => {
+    const { page, limit } = req.query;
+    const { keyword } = req.body;
+    // console.log(keyword, page, limit);
+    if (keyword) {
+        usePages.setFilter({ "email": { $regex: keyword } })
+    }
+    if (!keyword) {
+        usePages.setFilter({})
+    }
+    usePages.setPages(page)
     try {
-        const user = await User.find({}).select({ "fullName": 1, "email": 1, "scores": 1 })
-        console.log(user);
-        if (!user) {
+        const data = await User.find(usePages.filter).select({ "fullName": 1, "email": 1, "scores": 1 })
+        // console.log(data);
+        const totalItemsNumber = data.length;
+        const num_pages = Math.ceil(totalItemsNumber / limit);
+        if (usePages.pages > num_pages) {
+            usePages.setPages(num_pages)
+        }
+        const lowerLimit = usePages.pages * limit - limit;
+        const upperLimit = usePages.pages * limit;
+        const items = data.slice(lowerLimit, upperLimit)
+        if (!data) {
             res.status(500).send({ message: 'no user found' })
         } else {
-            res.send(user)
+            res.send({
+                "list": items,
+                "num_pages": num_pages,
+                "page": parseInt(usePages.pages),
+                "limit": parseInt(limit)
+            })
         }
     } catch (err) {
         res.status(500).send({ message: err })
