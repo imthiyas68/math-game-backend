@@ -154,3 +154,35 @@ exports.resetResult = async (req, res) => {
 
 
 }
+
+exports.fame = async (req, res) => {
+    try {
+        const user = await User.find({})
+        // console.log('total users', user);
+        const nonZeroUsers = user.filter(item => item.scores.lev1.value.reduce((a, b) => a + b, 0) > 0 ||
+            item.scores.lev2.value.reduce((a, b) => a + b, 0) ||
+            item.scores.lev3.value.reduce((a, b) => a + b, 0) ||
+            item.scores.lev4.value.reduce((a, b) => a + b, 0) ||
+            item.scores.lev5.value.reduce((a, b) => a + b, 0))
+        // console.log('filtered', nonZeroUsers);
+        let result = nonZeroUsers.map(item => {
+            return {
+                fullName: item.fullName,
+                games: item.scores.lev1.value.length + item.scores.lev2.value.length + item.scores.lev3.value.length + item.scores.lev4.value.length + item.scores.lev5.value.length,
+                scores: item.scores.lev1.value.reduce((a, b) => a + b, 0) + item.scores.lev2.value.reduce((a, b) => a + b, 0) + item.scores.lev3.value.reduce((a, b) => a + b, 0) + item.scores.lev4.value.reduce((a, b) => a + b, 0) + item.scores.lev5.value.reduce((a, b) => a + b, 0)
+            }
+        })
+        console.log(result);
+
+
+
+        res.send(result)
+
+
+
+    } catch (err) {
+        res.status(500).send({ message: err })
+    }
+
+
+}

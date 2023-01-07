@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const { signin, signup } = require('../controllers/auth.controller');
-const { setResult, result, allUsers, deleteUser, gameScore, resetResult } = require('../controllers/game.controller');
+const { setResult, result, allUsers, deleteUser, gameScore, resetResult, fame } = require('../controllers/game.controller');
 const verifyToken = require('../middlewares/authJWT');
 
 
@@ -14,6 +14,7 @@ router.post('/users/pagination', allUsers)
 router.delete('/user/:id', deleteUser)
 router.get('/game/:id', gameScore)
 router.delete('/scores', resetResult)
+router.get('/fame', fame)
 
 router.get('/hiddencontent', verifyToken, (req, res) => {
     if (!req.user) {
