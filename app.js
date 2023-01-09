@@ -2,12 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoutes = require('./routes/users');
-const http = require('http');
+const http = require("http");
+const https = require('https');
 const port = process.env.PORT || 5000;
+const fs = require('fs');
 
 
 
-app = express();
+const app = express();
 
 
 
@@ -51,3 +53,15 @@ const server = http.createServer(app);
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+// httpsServer = https.createServer(cred, app)
+// httpsServer.listen(8443)
+
+https
+    .createServer({
+        key: fs.readFileSync("key.pem"),
+        cert: fs.readFileSync("cert.pem"),
+    }, app)
+    .listen(8443, () => {
+        console.log('server is runing at port 8443')
+    });

@@ -172,7 +172,7 @@ exports.fame = async (req, res) => {
                 scores: item.scores.lev1.value.reduce((a, b) => a + b, 0) + item.scores.lev2.value.reduce((a, b) => a + b, 0) + item.scores.lev3.value.reduce((a, b) => a + b, 0) + item.scores.lev4.value.reduce((a, b) => a + b, 0) + item.scores.lev5.value.reduce((a, b) => a + b, 0)
             }
         })
-        console.log(result);
+        // console.log(result);
 
 
 
