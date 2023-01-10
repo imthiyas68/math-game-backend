@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const { writeFileSync, readFileSync, unlinkSync, writeFile } = require("fs");
 
 
 
@@ -75,4 +76,37 @@ exports.signin = async (req, res) => {
     } catch (err) {
         res.status(500).send({ message: err });
     }
+}
+
+exports.fileUpload = async (req, res) => {
+    const newpath = process.cwd() + "/files/";
+    const file = req.body.file;
+    const filename = req.body.email + '.png';
+    // console.log(file, filename);
+    var base64Data = file.replace(/^data:image\/png;base64,/, "");
+    writeFile(newpath + filename, base64Data, 'base64', async function (err) {
+        if (err) {
+            res.status(500).send({ message: "File upload failed", code: 200 });
+        }
+        try {
+            const user = await User.updateOne({ email: req.body.email }, { $set: { avatar: filename } })
+            if (!user) {
+                return res.status(404).send({ message: "User not found" });
+            }
+            res.send({ success: true })
+        } catch (err) {
+            res.status(500).send({ message: err });
+        }
+    });
+}
+
+exports.getFile = async (req, res) => {
+    const { fileName } = req.params;
+    const file = process.cwd() + "/files/" + fileName + '.png';
+    if (file) {
+        res.download(file);
+    } else {
+        res.status(500).send({ message: 'failed' });
+    }
+
 }

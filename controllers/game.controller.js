@@ -44,7 +44,7 @@ exports.result = async (req, res) => {
             res.send(user.scores)
         }
     } catch (err) {
-        // console.log(err);
+        console.log(err);
         res.status(500).send({ message: err })
     }
 }
@@ -168,6 +168,7 @@ exports.fame = async (req, res) => {
         let result = nonZeroUsers.map(item => {
             return {
                 fullName: item.fullName,
+                email: item.email,
                 games: item.scores.lev1.value.length + item.scores.lev2.value.length + item.scores.lev3.value.length + item.scores.lev4.value.length + item.scores.lev5.value.length,
                 scores: item.scores.lev1.value.reduce((a, b) => a + b, 0) + item.scores.lev2.value.reduce((a, b) => a + b, 0) + item.scores.lev3.value.reduce((a, b) => a + b, 0) + item.scores.lev4.value.reduce((a, b) => a + b, 0) + item.scores.lev5.value.reduce((a, b) => a + b, 0)
             }

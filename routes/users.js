@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { signin, signup } = require('../controllers/auth.controller');
+const { signin, signup, fileUpload, getFile } = require('../controllers/auth.controller');
 const { setResult, result, allUsers, deleteUser, gameScore, resetResult, fame } = require('../controllers/game.controller');
 const verifyToken = require('../middlewares/authJWT');
 
@@ -15,6 +15,8 @@ router.delete('/user/:id', deleteUser)
 router.get('/game/:id', gameScore)
 router.delete('/scores', resetResult)
 router.get('/fame', fame)
+router.post('/file', fileUpload)
+router.get('/file/:fileName', getFile)
 
 router.get('/hiddencontent', verifyToken, (req, res) => {
     if (!req.user) {

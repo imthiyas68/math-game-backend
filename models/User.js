@@ -133,6 +133,10 @@ const UserSchema = new Schema({
             },
         },
     },
+    avatar: {
+        type: String,
+        default: ''
+    },
     created: {
         type: Date,
         default: Date.now
